@@ -365,7 +365,3 @@ This project is licensed under the MIT License — see [LICENSE](LICENSE) for de
 - [BERTopic](https://github.com/MaartenGr/BERTopic)
 - [FactCheck.org](https://www.factcheck.org) · [PolitiFact](https://www.politifact.com) · [WHO](https://www.who.int)
 ```
-
----
-
-One thing to update before pasting: in the `@article` BibTeX block, replace `[Venue]` with the actual conference or journal name once it's assigned. Everything else is ready to paste directly into your GitHub `README.md`.
