@@ -1,4 +1,4 @@
-# Anti-Rumor Context Integration: A Novel RAG System for Automated Factual Correction
+Anti-Rumor Context Integration: A Novel RAG System for Automated Factual Correction
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -6,8 +6,7 @@
 
 ---
 
-> ⚠️ Citation Notice: This repository is the official implementation of
-> "Anti-Rumor Context Integration: A Novel RAG System for Automated Factual Correction", accepted in the 7th International Conference on Advances in Distributed Computing and Machine Learning.
+> ⚠️ Citation Notice: This repository is the official implementation of "Anti-Rumor Context Integration: A Novel RAG System for Automated Factual Correction," accepted in the 7th International Conference on Advances in Distributed Computing and Machine Learning.
 > (Maitreyee Ganguly, Paramita Dey, Soumik Pal — Government College of Engineering and Ceramic Technology, Kolkata).
 > If you use this code or build upon this work, please cite our paper using the BibTeX entry at the bottom of this README.
 
@@ -15,12 +14,12 @@
 
 ## Overview
 
-We propose a multi-tier Retrieval-Augmented Generation (RAG) system that goes beyond binary rumour classification to automatically generate **fact-grounded, explainable counter-narratives**.
+We propose a multi-tier Retrieval-Augmented Generation (RAG) system that goes beyond binary rumour classification to generate fact-grounded, explainable counter-narratives automatically.
 
 Key contributions:
 
 - Tiered Retrieval — Internal KB → Google Fact Check API → Live Web Search (trust–efficiency hierarchy)
-- Hybrid Semantic + Keyword Scoring — α·S_semantic + (1−α)·S_keyword with semantic re-ranking
+- Hybrid Semantic + Keyword Scoring** — α·S_semantic + (1−α)·S_keyword with semantic re-ranking
 - Constrained T5 Generation — Negative-prompt constraints to suppress hallucinations
 - XAI Module — Auditable evidence trail with source attribution per generated response
 - Zero-Shot Generalisation — Evaluated across COVID-19, ISOT, and Russia–Ukraine datasets with no task-specific fine-tuning
@@ -29,15 +28,16 @@ Key contributions:
 
 | Metric | Score |
 |---|---|
-| Rumour–Anti-Rumour Similarity (R-A) | **0.71** |
-| Anti-Rumour–Context Similarity (A-C) | **0.73** |
-| Fact Coverage Score (Cov.) | **0.72** |
-| Hallucination Rate | **10.05%** |
+| Rumour–Anti-Rumour Similarity (R-A) | 0.71 |
+| Anti-Rumour–Context Similarity (A-C) | 0.73 |
+| Fact Coverage Score (Cov.) | 0.72 |
+| Hallucination Rate | 10.05% |
 
 ---
 
 ## Architecture
 
+```
 Raw Rumour Text
        │
        ▼
@@ -87,16 +87,19 @@ Raw Rumour Text
                │
                ▼
      Explainable Anti-Rumour Output
+```
 
 ---
 
 ## Repository Structure
 
+```
 anti-rumor-rag/
 │
 ├── README.md
 ├── requirements.txt
-├── .gitignore
+├── LICENSE
+├── CITATION.cff
 │
 ├── config.py            ← All hyperparameters and path settings
 │
@@ -110,13 +113,13 @@ anti-rumor-rag/
 ├── visualize.py         ← Section 5: All paper figures (Figures 2–7)
 ├── inference.py         ← Single-sample inference with full XAI report
 │
-└── data/                ← Raw KB JSONs and dataset CSVs (not tracked by git)
-    └── sample/          ← Small sample data for quick testing
-
+└── data/
+    └── sample/          ← Sample rumours for quick testing
+```
 
 ---
 
-Requirements
+## Requirements
 
 ### System Requirements
 
@@ -126,7 +129,7 @@ Requirements
 
 ### Installation
 
-bash
+```bash
 # 1. Clone the repository
 git clone https://github.com/Maitreyee12aug/anti-rumor-rag.git
 cd anti-rumor-rag
@@ -141,10 +144,10 @@ pip install -r requirements.txt
 # 4. Download spaCy language model
 python -m spacy download en_core_web_sm
 
-# 5. (Optional) Download GloVe vectors for GloVe feature engineering
+# 5. (Optional) Download GloVe vectors
 wget https://nlp.stanford.edu/data/glove.6B.zip
 unzip glove.6B.zip -d .
-
+```
 
 ### Core Dependencies
 
@@ -163,7 +166,7 @@ unzip glove.6B.zip -d .
 
 ## Datasets
 
-Three publicly available datasets were used (zero-shot, no fine-tuning):
+Three publicly available datasets were used (zero-shot — no fine-tuning):
 
 | Dataset | Domain | Size |
 |---|---|---|
@@ -172,7 +175,7 @@ Three publicly available datasets were used (zero-shot, no fine-tuning):
 | [Russia–Ukraine War](https://huggingface.co/) | Conflict misinformation | ~65K |
 
 Place your dataset CSV at `data/Constraint_Train.csv` (or update `RAW_DATASET_PATH` in `config.py`).
-The CSV must contain at minimum a text column (default: `tweet`) and a `label` column.
+The CSV must contain at a minimum a text column (default: `tweet`) and a `label` column.
 
 ---
 
@@ -227,7 +230,7 @@ Produces: `data/unified_fact_kb.json`
 
 ---
 
-### Step 4 — Run the RAG Pipeline (Inference)
+### Step 4 — Single Rumour Inference
 
 ```bash
 # Single rumour
@@ -274,7 +277,7 @@ Example output:
 python evaluate.py --csv test.csv --sample 10000
 ```
 
-Produces: `outputs/evaluation_results.json` with per-instance scores and summary statistics.
+Produces: `outputs/evaluation_results.json` with per-instance scores and a summary.
 
 ---
 
@@ -284,9 +287,9 @@ Produces: `outputs/evaluation_results.json` with per-instance scores and summary
 python visualize.py
 ```
 
-Generates all figures from Section 5 of the paper to `outputs/`:
+Generates all figures from Section 5 to `outputs/`:
 
-| File | Description |
+| File | Figure |
 |---|---|
 | `fig2_score_distributions.png` | Figure 2: Score histograms (R-A, A-C, Coverage) |
 | `fig3a_coverage_vs_context.png` | Figure 3a: Coverage vs. context similarity scatter |
@@ -306,8 +309,8 @@ All hyperparameters are centralised in `config.py`.
 | Parameter | Value | Description |
 |---|---|---|
 | `RAG_EMBEDDING_MODEL` | `all-mpnet-base-v2` | SBERT model for retrieval embeddings |
-| `HYBRID_ALPHA` | `0.6` | Semantic vs. keyword weight |
-| `TOP_K_INITIAL` | `20` | Initial candidate pool before re-ranking |
+| `HYBRID_ALPHA` | `0.6` | Semantic vs. keyword weight (α) |
+| `TOP_K_INITIAL` | `20` | Candidate pool size before re-ranking |
 | `CONTEXT_RELEVANCE_THRESHOLD` | `0.65` | Min A-C score to pass Tier 1 filter |
 | `MIN_CONFIDENCE_EXTERNAL` | `0.60` | Min confidence for Tier 2/3 facts |
 | `GENERATION_MODEL` | `t5-small` | HuggingFace generation model |
@@ -336,7 +339,6 @@ All hyperparameters are centralised in `config.py`.
 
 If you use this code in your research, please cite our paper.
 
-
 ---
 
 ## Contact
@@ -351,7 +353,7 @@ For questions or issues, please open a GitHub Issue or contact:
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
@@ -362,3 +364,8 @@ This project is licensed under the MIT License.
 - [Sentence-Transformers](https://www.sbert.net/)
 - [BERTopic](https://github.com/MaartenGr/BERTopic)
 - [FactCheck.org](https://www.factcheck.org) · [PolitiFact](https://www.politifact.com) · [WHO](https://www.who.int)
+```
+
+---
+
+One thing to update before pasting: in the `@article` BibTeX block, replace `[Venue]` with the actual conference or journal name once it's assigned. Everything else is ready to paste directly into your GitHub `README.md`.
